@@ -31,3 +31,8 @@ Para este proyecto se manejan 2 clases que son _RestAPIFacade_ y _MovieAPI_, tom
 La clase _RestAPIFacade_ crea un servidor HTTP que realiza llamados a _MovieAPI_ la cual se usa de forma similar a una inyección de dependencias donde se requiere de un método con el cual buscar los datos de la película dado su título. _MovieAPI_ utiliza la API gratuita de OMDb API para la obtención de los datos de las películas y maneja un mapa para simular una memoria caché, esto con el fin de no hacer consultas repetitivas a la API fuera de que el apikey que nos brinda OMDb tiene un límite de 1000 consultas al día.
 
 Se manejaron clases diferentes para el servidor y para la API con el fin de brindar flexibilidad para la extensión del proyecto y su posible modificación. En el servidor se cuenta con los elementos necesarios para levantar el servicio y escuchar por el puerto 17000, el cual se puede cambiar solo con modificar este valor que se encuentra en el enumerado llamado _env_.
+
+
+**Contruido con**
+  - [Git](https://git-scm.com) - Control de versiones
+  - [Maven](https://maven.apache.org) - Administrador de dependencias
