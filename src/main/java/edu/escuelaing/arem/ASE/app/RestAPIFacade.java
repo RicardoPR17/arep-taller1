@@ -7,11 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class RestAPIFacade {
 
-    private static MovieAPI movieSearcher = new MovieAPI();
+    private static APIQuery movieSearcher = new MovieAPI();
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;
