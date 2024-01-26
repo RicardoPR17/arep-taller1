@@ -111,6 +111,14 @@ public class RestAPIFacade {
         serverSocket.close();
     }
 
+    /**
+     * This auxiliar method search the movie with the given URL and send the
+     * response to the user who request the data
+     * 
+     * @param out          The writer to send the response to the usar
+     * @param urlWithTitle The URL created with the name of the movie to search in
+     *                     the cache
+     */
     private static void getMovieData(PrintWriter out, URL urlWithTitle) {
         // Search the movie with the API
         String movieData = null;

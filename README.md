@@ -1,8 +1,8 @@
 # **Taller 1 - Servidor Web para consultar películas**
+### *Hecho por Ricardo Pulido Renteria*
 
 En este taller, se desarrolla un servidor web utilizando Java y una API gratuita llamada OMDb API para brindar información sobre películas.
 El usuario podrá acceder desde su navegador para realizar la búsqueda por el título que desee y obtener los datos de dicha película en formato JSON.
-
 
 ## **Descarga y ejecución**
 
