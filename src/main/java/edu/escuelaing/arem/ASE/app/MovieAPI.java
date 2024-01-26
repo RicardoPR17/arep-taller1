@@ -8,7 +8,7 @@ import java.net.URLConnection;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MovieAPI {
+public class MovieAPI implements APIQuery {
     private static final String API = env.API.getValue();
     private Map<String, String> cache = new ConcurrentHashMap<>();
 
