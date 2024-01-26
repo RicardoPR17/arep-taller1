@@ -19,7 +19,9 @@ La ejecución de este proyecto requiere de:
 
 ## **Instalación**
 
-Para poder trabajar con el proyecto, es necesario descargarlo desde GitHub. Para esto puede clonar el repositorio en su máquina o puede descargarlo en formato zip. Luego, puede ejecutarlo desde la terminal de comandos o desde el intérprete de código de su elección (VS Code, IntelliJ, NetBeans, etc).
+Para poder trabajar con el proyecto, es necesario descargarlo desde GitHub. Para esto puede clonar el repositorio en su máquina o puede descargarlo en formato zip. Luego, una vez acceda al directorio del proyecto, debe ejecutar el comando `mvn install` para descargar las dependencias del proyecto, ya sea desde la terminal de comandos o desde la terminal que le brinde el intérprete de código de su preferencia (VS Code, IntelliJ, NetBeans, etc).
+
+Para ejecutarlo, podrá hacerlo desde la terminal de comandos como se explica a continuación. O desde el intérprete de código de su elección, haciendo `run` o ejecutando el código de la clase _RestAPIFacade_.
 
 
 - **_Ejecución usando terminal de comandos_**
