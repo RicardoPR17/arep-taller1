@@ -36,9 +36,6 @@ public class HttpServer {
 
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
-                if (inputLine.contains("Referer")) {
-                    System.out.println(inputLine.split(" ")[1]);
-                }
                 if (!in.ready()) {
                     break;
                 }

@@ -11,7 +11,6 @@ import java.net.URLConnection;
 
 public class RestAPIFacade {
 
-    private static final String API = "http://www.omdbapi.com/?i=tt3896198&apikey=6754e60&t=";
     private static MovieAPI movieSearcher = new MovieAPI();
 
     public static void main(String[] args) throws IOException {
@@ -38,51 +37,88 @@ public class RestAPIFacade {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
                             clientSocket.getInputStream()));
-            String inputLine, outputLine;
+            String inputLine;
+            String outputLine;
             URL urlWithTitle = null;
+            boolean search = false;
 
             while ((inputLine = in.readLine()) != null) {
-                if (inputLine.contains("Referer")) {
+                if (inputLine.contains("GET") && !inputLine.contains("favicon")) {
                     String[] url = inputLine.split(" ");
-                    urlWithTitle = new URL(url[1]);
+                    urlWithTitle = new URL("http://localhost:35000" + url[1]);
+                    search = true;
+                    break;
                 }
                 if (!in.ready()) {
                     break;
                 }
             }
 
-            // Search the movie with the API
-            String movieData = null;
-            String movieTitle = null;
-            try {
-                movieTitle = urlWithTitle.getQuery();
-                System.out.println(movieTitle);
-                movieData = movieSearcher.queryMovie(movieTitle);
-                System.out.println(movieData);
-            } catch (NullPointerException nullE) {
-                System.out.println("Error");
-            }
-
             outputLine = "HTTP/1.1 200 OK\r\n"
                     + "Content-Type:text/html; charset=ISO-8859-1\r\n"
                     + "\r\n"
-                    + "<!DOCTYPE html>"
-                    + "<html>"
-                    + "<head>"
-                    + "<meta charset=\"UTF-8\">"
-                    + "<title>Title of the document</title>\n"
-                    + "</head>"
-                    + "<body>"
-                    + "My Web Site"
-                    + movieSearcher.queryMovie(movieTitle)
-                    + "</body>"
-                    + "</html>";
+                    + "<!DOCTYPE html>\r\n" + //
+                    "<html>\r\n" + //
+                    "  <head>\r\n" + //
+                    "    <title>Movie Data App</title>\r\n" + //
+                    "    <meta charset=\"UTF-8\" />\r\n" + //
+                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n" + //
+                    "  </head>\r\n" + //
+                    "  <body>\r\n" + //
+                    "    <h1>Welcome, please use the following form to obtain the data of a movie</h1>\r\n" + //
+                    "    <form>\r\n" + //
+                    "      <label for=\"name\">Movie title:</label>\r\n" + //
+                    "      <br />\r\n" + //
+                    "      <input type=\"text\" id=\"title\" placeholder=\"Type the title of the movie...\" />\r\n" + //
+                    "      <br />\r\n" + //
+                    "      <br />\r\n" + //
+                    "      <input type=\"button\" value=\"Submit\" onclick=\"getMovieData()\" />\r\n" + //
+                    "    </form>\r\n" + //
+                    "    <div id=\"movieData\"></div>\r\n" + //
+                    "\r\n" + //
+                    "    <script>\r\n" + //
+                    "      function getMovieData() {\r\n" + //
+                    "        let nameVar = document.getElementById(\"title\").value;\r\n" + //
+                    "        const xhttp = new XMLHttpRequest();\r\n" + //
+                    "        xhttp.onload = function () {\r\n" + //
+                    "          document.getElementById(\"movieData\").innerHTML = this.responseText;\r\n" + //
+                    "        };\r\n" + //
+                    "        xhttp.open(\"GET\", \"/?\" + nameVar);\r\n" + //
+                    "        xhttp.send();\r\n" + //
+                    "        document.getElementById(\"title\").value = \"\";\r\n" + //
+                    "      }\r\n" + //
+                    "    </script>\r\n" + //
+                    "  </body>\r\n" + //
+                    "</html>\r\n" + //
+                    "";
+
             out.println(outputLine);
+
+            if (search) {
+                getMovieData(out, urlWithTitle);
+            }
 
             out.close();
             in.close();
             clientSocket.close();
         }
         serverSocket.close();
+    }
+
+    private static void getMovieData(PrintWriter out, URL urlWithTitle) {
+        // Search the movie with the API
+        String movieData = null;
+        String movieTitle = null;
+        try {
+            movieTitle = urlWithTitle.getQuery();
+            if (movieTitle == null)
+                throw new NullPointerException();
+            movieData = movieSearcher.queryMovie(movieTitle);
+            System.out.println(movieData);
+        } catch (NullPointerException nullE) {
+            movieData = "";
+        }
+
+        out.println(movieData);
     }
 }

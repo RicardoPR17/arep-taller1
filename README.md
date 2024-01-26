@@ -33,6 +33,6 @@ La clase _RestAPIFacade_ crea un servidor HTTP que realiza llamados a _MovieAPI_
 Se manejaron clases diferentes para el servidor y para la API con el fin de brindar flexibilidad para la extensión del proyecto y su posible modificación. En el servidor se cuenta con los elementos necesarios para levantar el servicio y escuchar por el puerto 17000, el cual se puede cambiar solo con modificar este valor que se encuentra en el enumerado llamado _env_.
 
 
-**Contruido con**
+**Construido con**
   - [Git](https://git-scm.com) - Control de versiones
   - [Maven](https://maven.apache.org) - Administrador de dependencias

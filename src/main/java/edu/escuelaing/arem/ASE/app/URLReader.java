@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class URLReader {
     public static void main(String[] args) throws Exception {
-        URL google = new URL("http://www.omdbapi.com/?i=tt3896198&apikey=6754e60&t=matrix");
+        URL google = new URL("https://www.google.com");
 
         // Crea el objeto que representa una URL
         URL siteURL = new URL(google.toString());

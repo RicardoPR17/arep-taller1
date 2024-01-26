@@ -31,7 +31,9 @@ public class MovieAPI {
                 String inputLine = null;
                 while ((inputLine = reader.readLine()) != null) {
                     movie = inputLine;
-                    cache.put(movieTitle, movie);
+                    if (!inputLine.contains("Movie not found!")) {
+                        cache.put(movieTitle, movie);
+                    }
                 }
             } catch (IOException x) {
                 System.err.println(x);
