@@ -6,10 +6,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MovieAPI {
     private static final String API = env.API.getValue();
-    private Map<String, String> cache = new HashMap<>();
+    private Map<String, String> cache = new ConcurrentHashMap<>();
 
     public MovieAPI() {
         // Empty constructor for the movie api
@@ -18,8 +19,8 @@ public class MovieAPI {
     public String queryMovie(String movieTitle) {
         String movie = "";
 
-        if (cache.containsKey(movieTitle)) {
-            movie = cache.get(movieTitle);
+        if (cache.containsKey(movieTitle.toLowerCase())) {
+            movie = cache.get(movieTitle.toLowerCase());
             return movie;
         }
 
@@ -32,7 +33,9 @@ public class MovieAPI {
                 while ((inputLine = reader.readLine()) != null) {
                     movie = inputLine;
                     if (!inputLine.contains("Movie not found!")) {
-                        cache.put(movieTitle, movie);
+                        cache.putIfAbsent(movieTitle.toLowerCase(), movie);
+                    } else {
+                        movie = "Movie not found! Please check and try again";
                     }
                 }
             } catch (IOException x) {

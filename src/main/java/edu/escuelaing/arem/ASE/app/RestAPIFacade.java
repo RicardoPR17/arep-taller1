@@ -46,7 +46,9 @@ public class RestAPIFacade {
                 if (inputLine.contains("GET") && !inputLine.contains("favicon")) {
                     String[] url = inputLine.split(" ");
                     urlWithTitle = new URL("http://localhost:35000" + url[1]);
-                    search = true;
+                    if (url[1].contains("/movie?movie=")) {
+                        search = true;
+                    }
                     break;
                 }
                 if (!in.ready()) {
@@ -54,48 +56,53 @@ public class RestAPIFacade {
                 }
             }
 
-            outputLine = "HTTP/1.1 200 OK\r\n"
-                    + "Content-Type:text/html; charset=ISO-8859-1\r\n"
-                    + "\r\n"
-                    + "<!DOCTYPE html>\r\n" + //
-                    "<html>\r\n" + //
-                    "  <head>\r\n" + //
-                    "    <title>Movie Data App</title>\r\n" + //
-                    "    <meta charset=\"UTF-8\" />\r\n" + //
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n" + //
-                    "  </head>\r\n" + //
-                    "  <body>\r\n" + //
-                    "    <h1>Welcome, please use the following form to obtain the data of a movie</h1>\r\n" + //
-                    "    <form>\r\n" + //
-                    "      <label for=\"name\">Movie title:</label>\r\n" + //
-                    "      <br />\r\n" + //
-                    "      <input type=\"text\" id=\"title\" placeholder=\"Type the title of the movie...\" />\r\n" + //
-                    "      <br />\r\n" + //
-                    "      <br />\r\n" + //
-                    "      <input type=\"button\" value=\"Submit\" onclick=\"getMovieData()\" />\r\n" + //
-                    "    </form>\r\n" + //
-                    "    <div id=\"movieData\"></div>\r\n" + //
-                    "\r\n" + //
-                    "    <script>\r\n" + //
-                    "      function getMovieData() {\r\n" + //
-                    "        let nameVar = document.getElementById(\"title\").value;\r\n" + //
-                    "        const xhttp = new XMLHttpRequest();\r\n" + //
-                    "        xhttp.onload = function () {\r\n" + //
-                    "          document.getElementById(\"movieData\").innerHTML = this.responseText;\r\n" + //
-                    "        };\r\n" + //
-                    "        xhttp.open(\"GET\", \"/?\" + nameVar);\r\n" + //
-                    "        xhttp.send();\r\n" + //
-                    "        document.getElementById(\"title\").value = \"\";\r\n" + //
-                    "      }\r\n" + //
-                    "    </script>\r\n" + //
-                    "  </body>\r\n" + //
-                    "</html>\r\n" + //
-                    "";
-
-            out.println(outputLine);
-
             if (search) {
                 getMovieData(out, urlWithTitle);
+            } else {
+                outputLine = "HTTP/1.1 200 OK\r\n"
+                        + "Content-Type:text/html; charset=ISO-8859-1\r\n"
+                        + "\r\n"
+                        + "<!DOCTYPE html>\r\n" + //
+                        "<html>\r\n" + //
+                        "  <head>\r\n" + //
+                        "    <title>Movie Data App</title>\r\n" + //
+                        "    <meta charset=\"UTF-8\" />\r\n" + //
+                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n" + //
+                        "  </head>\r\n" + //
+                        "  <body>\r\n" + //
+                        "    <h1>Welcome, please use the following form to obtain the data of a movie</h1>\r\n" + //
+                        "    <form action=\"/movie\">\r\n" + //
+                        "      <label for=\"name\">Movie title:</label>\r\n" + //
+                        "      <br />\r\n" + //
+                        "      <input type=\"text\" id=\"title\" placeholder=\"Type the title of the movie...\" />\r\n"
+                        + //
+                        "      <br />\r\n" + //
+                        "      <br />\r\n" + //
+                        "      <input type=\"button\" value=\"Submit\" onclick=\"getMovieData()\" />\r\n" + //
+                        "    </form>\r\n" + //
+                        "    <br />\r\n" + //
+                        "    <div id=\"movieData\">\r\n" + //
+                        "\r\n" + //
+                        "    </div>\r\n" + //
+                        "\r\n" + //
+                        "<script>\r\n" + //
+                        "      function getMovieData() {\r\n" + //
+                        "        let nameVar = document.getElementById(\"title\").value;\r\n" + //
+                        "        const xhttp = new XMLHttpRequest();\r\n" + //
+                        "        xhttp.onload = function () {\r\n" + //
+                        "          document.getElementById(\"movieData\").innerHTML = this.responseText;\r\n" + //
+                        "        };\r\n" + //
+                        "        xhttp.open(\"GET\", \"/movie?movie=\" + nameVar);\r\n" + //
+                        "        xhttp.send();\r\n" + //
+                        "        document.getElementById(\"title\").value = \"\";\r\n" + //
+                        "      }\r\n" + //
+                        "    </script>\r\n" + //
+                        "" + //
+                        "  </body>\r\n" + //
+                        "</html>\r\n" + //
+                        "";
+
+                out.println(outputLine);
             }
 
             out.close();
@@ -110,15 +117,19 @@ public class RestAPIFacade {
         String movieData = null;
         String movieTitle = null;
         try {
-            movieTitle = urlWithTitle.getQuery();
+            movieTitle = urlWithTitle.getQuery().replace("movie=", "");
             if (movieTitle == null)
                 throw new NullPointerException();
             movieData = movieSearcher.queryMovie(movieTitle);
-            System.out.println(movieData);
         } catch (NullPointerException nullE) {
             movieData = "";
         }
 
-        out.println(movieData);
+        String response = "HTTP/1.1 200 OK\r\n"
+                + "Content-Type:text/html; charset=ISO-8859-1\r\n"
+                + "\r\n"
+                + movieData;
+
+        out.println(response);
     }
 }
